@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISRO NRSC - Satellite Data Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #1e293b;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 25%, #fef3c7 75%, #fed7aa 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .bg-decoration {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .floating-circle {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 20s infinite ease-in-out;
+            opacity: 0.4;
+        }
+
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, #bfdbfe, #ddd6fe);
+            top: 10%;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .circle-2 {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #fde68a, #fcd34d);
+            top: 60%;
+            right: -50px;
+            animation-delay: 3s;
+        }
+
+        .circle-3 {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #a5f3fc, #67e8f9);
+            bottom: 20%;
+            left: 15%;
+            animation-delay: 6s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        .satellite-orbit {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            border: 2px dashed rgba(147, 197, 253, 0.4);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: rotate 40s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .satellite {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 50%;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
+            animation: pulse-light 2s ease-in-out infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        @keyframes pulse-light {
+            0%, 100% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.6); }
+            50% { box-shadow: 0 0 50px rgba(59, 130, 246, 1); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            padding: 20px 0;
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(147, 197, 253, 0.3);
+            animation: slideDown 0.8s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            animation: fadeInLeft 1s ease;
+        }
+
+        @keyframes fadeInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #f97316, #fb923c);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: white;
+            font-size: 32px;
+            box-shadow: 0 8px 32px rgba(249, 115, 22, 0.3);
+            position: relative;
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .logo::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: inherit;
+            filter: blur(20px);
+            opacity: 0.5;
+            animation: pulse-light 2s ease-in-out infinite;
+        }
+
+        .org-info h1 {
+            font-size: 28px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .org-info p {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .developer-credit {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 5px;
+            font-weight: 500;
+        }
+
+        .developer-credit span {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        nav {
+            display: flex;
+            gap: 15px;
+            animation: fadeInRight 1s ease;
+        }
+
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #475569;
+            font-weight: 600;
+            padding: 14px 28px;
+            border-radius: 30px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            box-shadow: 0 4px 12px rgba(100, 116, 139, 0.1);
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            transition: all 0.4s ease;
+            z-index: -1;
+        }
+
+        nav a:hover::before, nav a.active::before {
+            left: 0;
+        }
+
+        nav a:hover, nav a.active {
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+        }
+
+        .main-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 32px;
+            margin-top: 40px;
+            padding: 60px;
+            box-shadow: 0 20px 60px rgba(59, 130, 246, 0.1);
+            min-height: 500px;
+            border: 1px solid rgba(147, 197, 253, 0.2);
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: pageTransition 0.6s ease;
+        }
+
+        @keyframes pageTransition {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        h2 {
+            color: #0f172a;
+            margin-bottom: 30px;
+            font-size: 48px;
+            font-weight: 800;
+            position: relative;
+            display: inline-block;
+            animation: slideInTitle 0.8s ease;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @keyframes slideInTitle {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+            animation: expandLine 1.5s ease forwards;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        @keyframes expandLine {
+            to { width: 100%; }
+        }
+
+        .project-info {
+            margin-top: 50px;
+        }
+
+        .info-section {
+            margin-bottom: 45px;
+            opacity: 0;
+            animation: fadeInSection 0.8s ease forwards;
+            animation-delay: calc(var(--delay) * 0.1s);
+        }
+
+        @keyframes fadeInSection {
+            to { opacity: 1; }
+        }
+
+        .info-section:nth-child(1) { --delay: 1; }
+        .info-section:nth-child(2) { --delay: 2; }
+        .info-section:nth-child(3) { --delay: 3; }
+        .info-section:nth-child(4) { --delay: 4; }
+        .info-section:nth-child(5) { --delay: 5; }
+        .info-section:nth-child(6) { --delay: 6; }
+
+        .info-section h3 {
+            color: #3b82f6;
+            font-size: 28px;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+            font-weight: 700;
+        }
+
+        .info-section h3::before {
+            content: '✦';
+            margin-right: 12px;
+            color: #8b5cf6;
+            animation: sparkle 2s infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+            50% { transform: scale(1.2) rotate(180deg); opacity: 0.7; }
+        }
+
+        .info-section p, .info-section ul {
+            color: #334155;
+            line-height: 1.9;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .info-section ul {
+            padding-left: 25px;
+        }
+
+        .info-section li {
+            margin-bottom: 14px;
+            position: relative;
+            padding-left: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .info-section li:hover {
+            color: #3b82f6;
+            transform: translateX(8px);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%);
+            padding: 35px;
+            border-radius: 24px;
+            border-left: 6px solid #3b82f6;
+            margin: 30px 0;
+            box-shadow: 0 10px 40px rgba(59, 130, 246, 0.08);
+            animation: glow 4s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .highlight-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(59, 130, 246, 0.05), transparent);
+            animation: shine 4s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 10px 40px rgba(59, 130, 246, 0.08); }
+            50% { box-shadow: 0 10px 50px rgba(59, 130, 246, 0.15); }
+        }
+
+        .highlight-box p, .highlight-box h3 {
+            position: relative;
+            z-index: 1;
+        }
+
+        .highlight-box p {
+            color: #1e293b;
+            font-weight: 500;
+        }
+
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .download-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.1);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: cardSlideIn 0.8s ease forwards;
+            animation-delay: calc(var(--card-delay) * 0.08s);
+        }
+
+        @keyframes cardSlideIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .download-card:nth-child(1) { --card-delay: 1; }
+        .download-card:nth-child(2) { --card-delay: 2; }
+        .download-card:nth-child(3) { --card-delay: 3; }
+        .download-card:nth-child(4) { --card-delay: 4; }
+        .download-card:nth-child(5) { --card-delay: 5; }
+        .download-card:nth-child(6) { --card-delay: 6; }
+        .download-card:nth-child(7) { --card-delay: 7; }
+        .download-card:nth-child(8) { --card-delay: 8; }
+        .download-card:nth-child(9) { --card-delay: 9; }
+
+        .download-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .download-card:hover::before {
+            opacity: 1;
+        }
+
+        .download-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(59, 130, 246, 0.2);
+            border-color: #3b82f6;
+        }
+
+        .download-card h3 {
+            color: #0f172a;
+            font-size: 22px;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .download-card p {
+            color: #64748b;
+            margin-bottom: 25px;
+            font-size: 15px;
+            position: relative;
+            z-index: 1;
+            line-height: 1.7;
+        }
+
+        .file-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+            font-weight: 500;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .download-btn:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(59, 130, 246, 0.4);
+        }
+
+        .download-btn:active {
+            transform: scale(0.98);
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 24px;
+            text-align: center;
+            box-shadow: 0 12px 40px rgba(59, 130, 246, 0.25);
+            transition: all 0.4s ease;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            animation: statBoxFloat 4s ease-in-out infinite;
+            animation-delay: calc(var(--stat-delay) * 0.2s);
+        }
+
+        @keyframes statBoxFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .stat-box:nth-child(1) { --stat-delay: 0; }
+        .stat-box:nth-child(2) { --stat-delay: 1; }
+        .stat-box:nth-child(3) { --stat-delay: 2; }
+        .stat-box:nth-child(4) { --stat-delay: 3; }
+
+        .stat-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+            animation: rotateGradient 8s linear infinite;
+        }
+
+        @keyframes rotateGradient {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .stat-box:hover {
+            transform: scale(1.08) translateY(-8px);
+            box-shadow: 0 20px 60px rgba(59, 130, 246, 0.4);
+        }
+
+        .stat-box h4 {
+            font-size: 52px;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+            font-weight: 800;
+            animation: countUp 2s ease;
+        }
+
+        @keyframes countUp {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .stat-box p {
+            font-size: 16px;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            animation: fadeInOverlay 0.3s ease;
+        }
+
+        .popup-overlay.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeInOverlay {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .password-popup {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 50px;
+            border-radius: 32px;
+            box-shadow: 0 30px 80px rgba(59, 130, 246, 0.3);
+            max-width: 450px;
+            width: 90%;
+            border: 1px solid rgba(147, 197, 253, 0.3);
+            animation: popupSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        @keyframes popupSlideIn {
+            from { transform: scale(0.8) translateY(-50px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            font-size: 28px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .popup-close:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            transform: rotate(90deg);
+        }
+
+        .popup-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 25px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .popup-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0f172a;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .popup-subtitle {
+            font-size: 15px;
+            color: #64748b;
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .password-input-group {
+            margin-bottom: 25px;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            background: white;
+            color: #1e293b;
+        }
+
+        .password-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+
+        .error-message {
+            display: none;
+            color: #ef4444;
+            font-size: 14px;
+            margin-top: 10px;
+            padding: 12px 16px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 12px;
+            border-left: 4px solid #ef4444;
+            animation: shake 0.5s ease;
+        }
+
+        .error-message.active {
+            display: block;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .popup-submit-btn {
+            width: 100%;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+        }
+
+        .popup-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(59, 130, 246, 0.4);
+        }
+
+        .popup-submit-btn:active {
+            transform: scale(0.98);
+        }
+
+        footer {
+            text-align: center;
+            padding: 50px 20px;
+            color: #475569;
+            margin-top: 60px;
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+        }
+
+        footer p {
+            margin-bottom: 10px;
+            animation: fadeIn 2s ease;
+            font-weight: 500;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+            }
+
+            nav a {
+                text-align: center;
+            }
+
+            .main-content {
+                padding: 30px 20px;
+            }
+
+            h2 {
+                font-size: 36px;
+            }
+
+            .download-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .logo {
+                width: 70px;
+                height: 70px;
+                font-size: 28px;
+            }
+
+            .org-info h1 {
+                font-size: 24px;
+            }
+
+            .password-popup {
+                padding: 35px 25px;
+            }
+
+            .popup-title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-decoration">
+        <div class="floating-circle circle-1"></div>
+        <div class="floating-circle circle-2"></div>
+        <div class="floating-circle circle-3"></div>
+        <div class="satellite-orbit">
+            <div class="satellite"></div>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="password-popup">
+            <button class="popup-close" onclick="closePopup()">×</button>
+            <div class="popup-icon">🔒</div>
+            <h2 class="popup-title">Secure Download</h2>
+            <p class="popup-subtitle">Please enter the password to access this file</p>
+            <div class="password-input-group">
+                <input 
+                    type="password" 
+                    class="password-input" 
+                    id="passwordInput" 
+                    placeholder="Enter password"
+                    onkeypress="if(event.key === 'Enter') verifyPassword()"
+                >
+                <div class="error-message" id="errorMessage">❌ Incorrect password. Please try again.</div>
+            </div>
+            <button class="popup-submit-btn" onclick="verifyPassword()">Verify & Download</button>
+        </div>
+    </div>
+
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo">🛰️</div>
+                <div class="org-info">
+                    <h1>Change Detection and Base map Generation</h1>
+                    <p>Regional Remote Sensing Centre</p>
+                    <p class="developer-credit">Developed by <span>Aman Khapre</span></p>
+                </div>
+            </div>
+            <nav>
+                <a href="#" data-page="about" class="nav-link active">About Project</a>
+                <a href="#" data-page="downloads" class="nav-link">Downloads</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            <div id="about" class="page active">
+                <h2>Satellite Data Distribution Portal</h2>
+                
+                <div class="highlight-box">
+                    <p><strong>A comprehensive platform for accessing and downloading Indian satellite imagery and remote sensing data products from ISRO's National Remote Sensing Centre.</strong></p>
+                    <p style="margin-top: 15px; font-size: 14px; color: #64748b;">💡 Platform developed by <span style="background: linear-gradient(135deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700;">Aman Khapre</span></p>
+                </div>
+
+                <div class="stats-container">
+                    <div class="stat-box">
+                        <h4>68554</h4>
+                        <p>Annotations</p>
+                    </div>
+                    <div class="stat-box">
+                        <h4>50TB+</h4>
+                        <p>Data Archive</p>
+                    </div>
+                    <div class="stat-box">
+                        <h4>15+</h4>
+                        <p>Data Products</p>
+                    </div>
+                    <div class="stat-box">
+                        <h4>24/7</h4>
+                        <p>Accessibility</p>
+                    </div>
+                </div>
+
+                <div class="project-info">
+                    <div class="info-section">
+                        <h3>Project 1: Change Detection Using A* Algorithm</h3>
+                        <p><strong>Overview:</strong> This project focuses on identifying changes in satellite imagery over time using an optimized A* path‑finding algorithm combined with remote sensing preprocessing techniques. The system enhances precision in detecting structural, vegetation, and land‑use changes.</p>
+                        <p><strong>Objectives:</strong></p>
+                        <ul>
+                            <li>Detect bi-temporal changes in satellite data efficiently</li>
+                            <li>Implement A* for accurate region comparison</li>
+                            <li>Enhance performance with preprocessing and filtering</li>
+                            <li>Apply results to urban growth, disaster impact, and environmental monitoring</li>
+                        </ul>
+        
+                        <p><strong>Dataset:</strong> Multi-temporal images from ISRO missions (Resourcesat, Cartosat) with varying spatial resolutions. Includes orthorectified, radiometrically corrected products.</p>
+        
+                        <p><strong>Workflow:</strong></p>
+                        <ul>
+                            <li>Data acquisition & preprocessing (noise removal, normalization)</li>
+                            <li>Edge & feature extraction</li>
+                            <li>A* algorithm applied for region‑to‑region comparison</li>
+                            <li>Change map generation</li>
+                        </ul>
+        
+                        <p><strong>Results:</strong> High‑accuracy change maps showing land‑use shifts, vegetation loss, urban expansion, and disaster impact zones.</p>
+                    </div>
+        
+                    <div class="info-section">
+                        <h3>Project 2: Basemap Generation Using Deep Learning</h3>
+                        <p><strong>Overview:</strong> The Basemap Generation project uses deep learning to automatically extract roads, buildings, vegetation, and water bodies from high‑resolution satellite imagery.</p>
+        
+                        <p><strong>Objectives:</strong></p>
+                        <ul>
+                            <li>Generate high‑quality basemaps at scale</li>
+                            <li>Automate feature extraction using GANs</li>
+                            <li>Support GIS mapping, planning, and navigation systems</li>
+                        </ul>
+        
+                        <p><strong>Dataset:</strong> High‑resolution images from Resourcesat, Cartosat, and open‑source repositories. Includes RGB + PAN sharpened imagery.</p>
+        
+                        <p><strong>Workflow:</strong></p>
+                        <ul>
+                            <li>Data preparation and tiling</li>
+                            <li>Training deep learning models for segmentation</li>
+                            <li>Post‑processing (vectorization, smoothing)</li>
+                            <li>Basemap rendering</li>
+                        </ul>
+        
+                        <p><strong>Applications:</strong></p>
+                        <ul>
+                            <li>Urban planning and infrastructure mapping</li>
+                            <li>Disaster recovery and rapid damage assessment</li>
+                            <li>Automated GIS system development</li>
+                            <li>Smart city applications</li>
+                        </ul>
+        
+                        <p><strong>Results:</strong> Produced accurate basemaps with well‑detected roads, building outlines, and natural features. Improved segmentation accuracy using multi-scale inputs.</p>
+                    </div>
+        
+                    <div class="info-section">
+                        <h3>Combined Impact</h3>
+                        <p>With both <strong>change detection</strong> and <strong>basemap generation</strong>, the system provides a complete geospatial intelligence workflow supporting decision‑making for government agencies, researchers, and planners.</p>
+                        <p style="margin-top: 20px; padding: 20px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(139, 92, 246, 0.05)); border-radius: 16px; border-left: 4px solid #3b82f6;">
+                            <strong style="color: #3b82f6;">👨‍💻 Project Developer:</strong><br>
+                            <span style="font-size: 18px; font-weight: 700; background: linear-gradient(135deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Aman Khapre</span><br>
+                            <span style="font-size: 14px; color: #64748b;">Research Intern - ISRO NRSC</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="downloads" class="page">
+                <h2>Download Resources</h2>
+                <p style="color: #64748b; font-size: 18px; margin-bottom: 10px; font-weight: 500;">Access satellite data products, software tools, and documentation for ISRO NRSC missions.</p>
+                <p style="color: #94a3b8; font-size: 14px; margin-bottom: 30px;">
+                    📦 All resources compiled and organized by <span style="background: linear-gradient(135deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700;">Aman Khapre</span>
+                </p>
+
+                <div class="download-grid">
+                    <div class="download-card">
+                        <h3>🎯 All-in-One Complete Project Package</h3>
+                        <p>Everything in one place! Complete collection of all projects, datasets, thesis, presentation, and documentation.</p>
+                        <div class="file-info">
+                            <span>Format: ZIP</span>
+                            <span>Size: 15+ GB</span>
+                        </div>
+                        <button class="download-btn" onclick="downloadFile('allInOne')">Download Complete Package</button>
+                    </div>
+
+                    <div class="download-card">
+                        <h3>📥 Complete Basemap Project Files</h3>
+                        <p>Includes dataset, model files, scripts, and output basemaps used in the Basemap Generation project.</p>
+                        <div class="file-info">
+                            <span>Format: Google Drive Folder</span>
+                            <span>Size: 3.6 GB</span>
+                        </div>
+                        <button class="download-btn" onclick="downloadFile('basemapFull')">Download Basemap Project</button>
+                    </div>
+                    
+                    <div class="download-card">
+                        <h3>⭐ Change Detection (A* Algorithm) – Full Project</h3>
+                        <p>Complete implementation of A* based change detection: preprocessing, A* pipeline, outputs, scripts, and documentation.</p>
+                        <div class="file-info">
+                            <span>Format: Google Drive Folder</span>
+                            <span>Size: 4.2 GB</span>
+                        </div>
+                        <button class="download-btn" onclick="downloadFile('astarFull')">Download A* Change Project</button>
+                    </div>
+                    
+                    <div class="download-card">
+                        <h3>🌀 Multi‑Class Change Detection – Full Project</h3>
+                        <p>Deep learning multi-class change detection dataset, training scripts, notebooks, and results.</p>
+                        <div class="file-info">
+                            <span>Format: Google Drive Folder</span>
+                            <span>Size: 5.1 GB</span>
+                        </div>
+                        <button class="download-btn" onclick="downloadFile('multiclassFull')">Download Multi‑Class Project</button>
+                    </div>
+                    
+                    <div class="download-card">
+                        <h3>📘 Final Thesis Document</h3>
+                        <p>Complete written thesis including methodology, workflow, evaluation, and analysis.</p>
+                        <div class="file-info">
+                            <span>Format: Google Docs</span>
+                            <span>Size: 18 MB</span>
+                        </div>
+                        <button class="download-btn" onclick="downloadFile('thesis')">Download Thesis</button>
+                    </div>
+                    
+                    <div class="download-card">
+                        <h3>📽️ Final ISRO Presentation</h3>
+                        <p>The complete final ISRO NRSC project presentation in PPTX format.</p>
+                        <div class="file-info">
+                            <span>Format: Google Slides</span>
+                            <span>Size: 22 MB</span>
+                        </div>
+                        <button class="download-btn" onclick="downloadFile('presentation')">Download Presentation</button>
+                    </div>
+                   
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(147, 197, 253, 0.3);">
+            <span style="font-size: 14px;">🚀 Platform & Projects Developed by </span>
+            <span style="font-size: 16px; font-weight: 700; background: linear-gradient(135deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Aman Khapre</span>
+        </p>
+    </footer>
+
+    <script>
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('.page');
+        let currentFileId = null;
+
+        const filePasswords = {
+            'basemapFull': 'Anjum@m_basemap',
+            'astarFull': 'Anjum@m_astar',
+            'multiclassFull': 'Anjum@m_multiclass',
+            'thesis': 'Anjum@m_thesis',
+            'presentation': 'Anjum@m_presentation',
+            'allInOne': 'Anjum@m_allinone',
+            'resourcesat': 'Anjum@m_resourcesat',
+            'cartosat': 'Anjum@m_cartosat',
+            'risat': 'Anjum@m_risat',
+            'oceansat': 'Anjum@m_oceansat'
+        };
+
+        const downloadLinks = {
+            'basemapFull': 'https://drive.google.com/drive/folders/18SYrAPfMA61umMzb6b8LSwAkp6lJpB2r?usp=sharing',
+            'astarFull': 'https://drive.google.com/drive/folders/1eqzWRWtnwfDndxk5_PlvrPinYatsa1h2?usp=sharing',
+            'multiclassFull': 'https://drive.google.com/drive/folders/12GvjzVof026VEuHRPENksEqI-QRTGs_s?usp=sharing',
+            'thesis': 'https://docs.google.com/document/d/1hRiLEe6D_e64xUX-WD8cCCCzio-9OHTU/edit?usp=sharing&ouid=102891187863099376326&rtpof=true&sd=true',
+            'presentation': 'https://docs.google.com/presentation/d/1u50mGGu0ougwxcy2jrvjEvxSxneBpJAG/edit?usp=sharing&ouid=102891187863099376326&rtpof=true&sd=true',
+            'allInOne': 'https://drive.google.com/file/d/10LzUH4Pd0IGDCzGF85ZeoqHzUxYJCP49/view?usp=sharing',
+            'resourcesat': 'https://example.com/resourcesat-2a-data.zip',
+            'cartosat': 'https://example.com/cartosat-3-imagery.zip',
+            'risat': 'https://example.com/risat-sar-products.zip',
+            'oceansat': 'https://example.com/oceansat-3-products.zip'
+        };
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                const pageId = link.getAttribute('data-page');
+                pages.forEach(page => {
+                    page.classList.remove('active');
+                    if (page.id === pageId) {
+                        page.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        function downloadFile(fileId) {
+            currentFileId = fileId;
+            document.getElementById('popupOverlay').classList.add('active');
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('errorMessage').classList.remove('active');
+            document.getElementById('passwordInput').focus();
+        }
+
+        function closePopup() {
+            document.getElementById('popupOverlay').classList.remove('active');
+            currentFileId = null;
+        }
+
+        document.getElementById('popupOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePopup();
+            }
+        });
+
+        function verifyPassword() {
+            const enteredPassword = document.getElementById('passwordInput').value;
+            const errorMessage = document.getElementById('errorMessage');
+            const correctPassword = filePasswords[currentFileId];
+
+            if (enteredPassword === correctPassword) {
+                errorMessage.classList.remove('active');
+                const downloadUrl = downloadLinks[currentFileId];
+                if (downloadUrl) {
+                    window.open(downloadUrl, '_blank');
+                }
+                setTimeout(() => {
+                    closePopup();
+                }, 500);
+            } else {
+                errorMessage.classList.add('active');
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closePopup();
+            }
+        });
+    </script>
+</body>
+</html>
